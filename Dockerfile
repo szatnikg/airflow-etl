@@ -12,8 +12,11 @@ USER airflow
 
 COPY requirements.txt /
 
+ENV AIRFLOW_IMAGE_NAME=etl:latest
+
 RUN python -m ensurepip --upgrade
 RUN pip install --no-cache-dir "apache-airflow==3.0.3" -r /requirements.txt
 
 
 COPY --chown=airflow:root /dags/etl_dag.py /opt/airflow/dags
+COPY --chown=airflow:root /data /opt/airflow/data

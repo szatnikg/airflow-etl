@@ -2,9 +2,6 @@ def run():
     print('load started ///HEREE')
     import sys
 
-    # Print the Python path
-    print('syspath;')
-    print(sys.path)
     
     import asyncio
     import aiohttp

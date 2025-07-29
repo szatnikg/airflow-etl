@@ -5,7 +5,12 @@ from datetime import datetime
 import os
 import sys
 sys.path.insert(0, os.path.abspath(r'/opt/airflow/'))
-print(os.getcwd())
+
+import logging
+
+# Suppress Great Expectations logs
+logging.getLogger("great_expectations").setLevel(logging.ERROR)
+
 
 # Task functions that import and run your scripts
 def run_extract():
@@ -21,6 +26,14 @@ def run_load():
     from scripts import load
     load.run()
 
+def run_weather():
+    from scripts import weather
+    weather.run()
+
+def run_transform():
+    from scripts import transform
+    transform.run()
+
 # Define the DAG
 with DAG(
     dag_id="etl_pipeline_dag",
@@ -35,6 +48,16 @@ with DAG(
         python_callable=run_extract,
     )
 
+    weather_task = PythonOperator(
+        task_id="weather",
+        python_callable=run_weather,
+    )
+
+    transform_task = PythonOperator(
+        task_id="transform",
+        python_callable=run_transform,
+    )
+
     validate_task = PythonOperator(
         task_id="validate",
         python_callable=run_validate,
@@ -46,5 +69,5 @@ with DAG(
     )
 
     # Define task dependencies
-    extract_task >> validate_task >> load_task
+    extract_task >> weather_task >> transform_task >> validate_task >> load_task
 
