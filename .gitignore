@@ -4,3 +4,4 @@ config
 plugins
 /data/sink/*.db
 /data/sink/*.log
+/data/src/tmp/*
