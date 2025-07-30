@@ -97,7 +97,7 @@ class Validator():
                 # Check for uniquness
                 gx.expectations.ExpectColumnValuesToBeUnique(column='CustomerID'),
 
-                #Check Weather DATA #TODO
+                #Check Weather DATA
 
                 gx.expectations.ExpectColumnValuesToBeOfType(column="temp", type_='float'),
                 gx.expectations.ExpectColumnValuesToBeBetween( column='temp', min_value=-80, max_value=80),
@@ -204,8 +204,8 @@ class Validator():
                 self.statDir.append_log(appendix +' ==== Failed on '+test['expectation_config']['type'] +' col: '+ test['expectation_config']['kwargs']['column'])
                 print(appendix, ' ==== Failed on ',test['expectation_config']['type'] ,' col: ', test['expectation_config']['kwargs']['column'])
             else:
-                self.statDir.append_log(' ==== '+test['success']+ ' ==== '+test['expectation_config']['type']+' col: '+ test['expectation_config']['kwargs']['column'])
-                print(' ==== ',test['success'], ' ==== ',test['expectation_config']['type'],' col: ', test['expectation_config']['kwargs']['column'])
+                self.statDir.append_log(' ==== '+str(test['success'])+ ' ==== '+test['expectation_config']['type']+' col: '+ test['expectation_config']['kwargs']['column'])
+                print(' ==== ',str(test['success']), ' ==== ',test['expectation_config']['type'],' col: ', test['expectation_config']['kwargs']['column'])
         self.statDir.append_log(validation_result['statistics'])
         print(validation_result['statistics'])
         return
