@@ -115,7 +115,7 @@ class WeatherApiHandler(StaticDirectory):
                 return
             data = json.loads(res.encode('utf-8'))
             # build df (in case of memory issues  consider writing to disk periodically and flushing self.weather_df)
-            self.append_log('=== WEATHER DATA: '+json.dumps(data))
+            
             new_data = {
                 'City': city,
                 'temp': data['main']['temp'],
