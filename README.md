@@ -10,7 +10,7 @@ Follow the steps below to set up and run the ETL pipeline:
 ```
 2. **Clone the Repository**:
 ```bash
-   git clone https://CFO-IA-DIdev.azure.com/CFO-IA-DI/IA-chatbot/_git/airflow
+   git clone https://github.com/szatnikg/airflow-etl
    cd airflow
 ```
 3. **Update the Weather API Key**:
