@@ -11,7 +11,7 @@ Follow the steps below to set up and run the ETL pipeline:
 2. **Clone the Repository**:
 ```bash
    git clone https://github.com/szatnikg/airflow-etl
-   cd airflow
+   cd airflow-etl
 ```
 3. **Update the Weather API Key**:
    - Open the `.env` file in the project directory.
