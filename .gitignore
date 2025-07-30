@@ -1,7 +1,8 @@
 logs
 *__pycache*
+/dags/*__pycache*
 config
 plugins
-/data/sink/*.db
-/data/sink/*.log
-/data/src/tmp/*
+data/sink/*.db
+data/sink/*.log
+data/src/tmp/*
