@@ -83,7 +83,8 @@ By following the steps above, you can set up and run a fully functional ETL pipe
 **Notes**
 - I created a coordinates.json file that can solve for future processing needs as the geomapping of cities from weatherAPI are not changing their coordinate values, so after first run, we use the Geomapping only for new cities. (Reduce # of requests)
 - I am failing the pipeline if 50%-or less cities can be matched from weather api data.
-- Each script file (mapped into airflow task) will create a traceback error log mentioning the name of the script file too. (try-except of each /script/*.py ) 
+- Each script file (mapped into airflow task) will create a traceback error log mentioning the name of the script file too. (try-except of each /script/*.py )
+- Absence of time to denote: exploratory data analysis has not been performed on the enriched dataset.
 
 **Data validation - expectations suite**
 - Also see first point of Future Improvements below
