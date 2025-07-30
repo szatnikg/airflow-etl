@@ -1,0 +1,156 @@
+==== LOG INIT ==== 
+2025-07-30T14:57:08.430857 - === EXTRACTED TABLE WRITTEN TO: ./data/src/tmp/region_mapping.parquet 
+2025-07-30T14:57:08.516084 - === EXTRACTED TABLE WRITTEN TO: ./data/src/tmp/Orders.parquet 
+2025-07-30T14:57:09.415996 - === EXTRACTED TABLE WRITTEN TO: ./data/src/tmp/[Order Details].parquet 
+2025-07-30T14:57:09.421066 - === EXTRACTED TABLE WRITTEN TO: ./data/src/tmp/Customers.parquet 
+2025-07-30T14:57:11.490652 - === ##WARNING## No data available for Tsawassen 
+2025-07-30T14:57:12.781040 - === self.weather_df.count() = City           68
+main           68
+description    68
+temp           68
+pressure       68
+humidity       68
+sea_level      68
+temp_max       68
+temp_min       68
+grnd_level     68
+wind_speed     68
+dtype: int64 
+2025-07-30T14:57:12.781479 - === WEATHER DATA OBTAINED SUCCESSFULLY 
+2025-07-30T14:57:12.781542 - === WEATHER TABLE WRITTEN TO: ./data/src/tmp/weather.parquet 
+2025-07-30T14:57:14.284011 - === Customers TABLE DROPPED DUPLICATES ON CustomerID AND WRITTEN TO: ./data/src/tmp/Customers.parquet 
+2025-07-30T14:57:14.326585 - === Orders TABLE DROPPED DUPLICATES ON OrderID AND WRITTEN TO: ./data/src/tmp/Orders.parquet 
+2025-07-30T14:57:14.330657 - === Number of null rows in CUSTOMERS TABLE CITY, REGION columns: {len(duplicates)} 
+2025-07-30T14:57:14.333320 - === DROPPED NULLS CUSTOMERS TABLE CITY, REGION columns AND WRITTEN TO: ./data/src/tmp/Customers.parquet 
+2025-07-30T14:57:14.425066 - === ORDERS TABLE DATES CONVERTED AND WRITTEN TO: ./data/src/tmp/Orders.parquet 
+2025-07-30T14:57:14.439422 - === CUSTOMERS TABLE ENRICHED WITH WEATHER DATA AND WRITTEN TO: ./data/src/tmp/Customers.parquet 
+2025-07-30T14:57:14.445794 - === CUSTOMERS TABLE ENRICHED WITH REGION MAPPING DATA AND WRITTEN TO: ./data/src/tmp/Customers.parquet 
+2025-07-30T14:57:20.643052 - ==== Validating table:Orders 
+2025-07-30T14:57:20.643152 -  ==== True ==== expect_column_values_to_be_of_type col: OrderID 
+2025-07-30T14:57:20.643182 -  ==== True ==== expect_column_values_to_not_be_null col: OrderID 
+2025-07-30T14:57:20.643198 -  ==== True ==== expect_column_values_to_be_unique col: OrderID 
+2025-07-30T14:57:20.643213 -  ==== True ==== expect_column_to_exist col: OrderID 
+2025-07-30T14:57:20.643228 -  ==== True ==== expect_column_values_to_be_of_type col: CustomerID 
+2025-07-30T14:57:20.643243 -  ==== True ==== expect_column_values_to_not_be_null col: CustomerID 
+2025-07-30T14:57:20.643261 -  ==== True ==== expect_column_to_exist col: CustomerID 
+2025-07-30T14:57:20.643288 -  ==== True ==== expect_column_values_to_be_of_type col: EmployeeID 
+2025-07-30T14:57:20.643332 -  ==== True ==== expect_column_values_to_not_be_null col: EmployeeID 
+2025-07-30T14:57:20.643352 -  ==== True ==== expect_column_to_exist col: EmployeeID 
+2025-07-30T14:57:20.643367 -  ==== True ==== expect_column_values_to_be_of_type col: OrderDate 
+2025-07-30T14:57:20.643383 - ##ERROR## ==== Failed on expect_column_values_to_not_be_null col: OrderDate 
+2025-07-30T14:57:20.643399 -  ==== True ==== expect_column_to_exist col: OrderDate 
+2025-07-30T14:57:20.643413 -  ==== True ==== expect_column_values_to_be_of_type col: RequiredDate 
+2025-07-30T14:57:20.643463 - ##ERROR## ==== Failed on expect_column_values_to_not_be_null col: RequiredDate 
+2025-07-30T14:57:20.643482 -  ==== True ==== expect_column_to_exist col: RequiredDate 
+2025-07-30T14:57:20.643496 -  ==== True ==== expect_column_values_to_be_of_type col: ShippedDate 
+2025-07-30T14:57:20.643514 - ##ERROR## ==== Failed on expect_column_values_to_not_be_null col: ShippedDate 
+2025-07-30T14:57:20.643529 -  ==== True ==== expect_column_to_exist col: ShippedDate 
+2025-07-30T14:57:20.643543 -  ==== True ==== expect_column_values_to_be_of_type col: ShipVia 
+2025-07-30T14:57:20.643558 -  ==== True ==== expect_column_to_exist col: ShipVia 
+2025-07-30T14:57:20.643572 -  ==== True ==== expect_column_values_to_be_of_type col: Freight 
+2025-07-30T14:57:20.643586 -  ==== True ==== expect_column_to_exist col: Freight 
+2025-07-30T14:57:20.643600 -  ==== True ==== expect_column_values_to_be_of_type col: ShipName 
+2025-07-30T14:57:20.643614 -  ==== True ==== expect_column_to_exist col: ShipName 
+2025-07-30T14:57:20.643628 -  ==== True ==== expect_column_values_to_be_of_type col: ShipAddress 
+2025-07-30T14:57:20.643641 -  ==== True ==== expect_column_values_to_not_be_null col: ShipAddress 
+2025-07-30T14:57:20.643655 -  ==== True ==== expect_column_to_exist col: ShipAddress 
+2025-07-30T14:57:20.643669 -  ==== True ==== expect_column_values_to_be_of_type col: ShipPostalCode 
+2025-07-30T14:57:20.643683 - ##ERROR## ==== Failed on expect_column_values_to_not_be_null col: ShipPostalCode 
+2025-07-30T14:57:20.643696 -  ==== True ==== expect_column_to_exist col: ShipPostalCode 
+2025-07-30T14:57:20.643710 -  ==== True ==== expect_column_values_to_be_of_type col: ShipCity 
+2025-07-30T14:57:20.643724 -  ==== True ==== expect_column_values_to_not_be_null col: ShipCity 
+2025-07-30T14:57:20.643738 -  ==== True ==== expect_column_to_exist col: ShipCity 
+2025-07-30T14:57:20.643752 -  ==== True ==== expect_column_values_to_be_of_type col: ShipCountry 
+2025-07-30T14:57:20.643765 -  ==== True ==== expect_column_values_to_not_be_null col: ShipCountry 
+2025-07-30T14:57:20.643779 -  ==== True ==== expect_column_to_exist col: ShipCountry 
+2025-07-30T14:57:20.643793 -  ==== True ==== expect_column_values_to_be_of_type col: ShipRegion 
+2025-07-30T14:57:20.643808 -  ==== True ==== expect_column_values_to_not_be_null col: ShipRegion 
+2025-07-30T14:57:20.643822 -  ==== True ==== expect_column_to_exist col: ShipRegion 
+2025-07-30T14:57:20.643835 - {'evaluated_expectations': 40, 'successful_expectations': 36, 'unsuccessful_expectations': 4, 'success_percent': 90.0} 
+2025-07-30T14:57:20.797095 - ==== Validating table:[Order Details] 
+2025-07-30T14:57:20.797205 -  ==== True ==== expect_column_values_to_be_of_type col: OrderID 
+2025-07-30T14:57:20.797233 -  ==== True ==== expect_column_values_to_not_be_null col: OrderID 
+2025-07-30T14:57:20.797251 -  ==== True ==== expect_column_to_exist col: OrderID 
+2025-07-30T14:57:20.797267 -  ==== True ==== expect_column_values_to_be_of_type col: ProductID 
+2025-07-30T14:57:20.797282 -  ==== True ==== expect_column_values_to_not_be_null col: ProductID 
+2025-07-30T14:57:20.797297 -  ==== True ==== expect_column_to_exist col: ProductID 
+2025-07-30T14:57:20.797313 -  ==== True ==== expect_column_values_to_be_of_type col: UnitPrice 
+2025-07-30T14:57:20.797327 -  ==== True ==== expect_column_values_to_not_be_null col: UnitPrice 
+2025-07-30T14:57:20.797341 -  ==== True ==== expect_column_to_exist col: UnitPrice 
+2025-07-30T14:57:20.797356 -  ==== True ==== expect_column_values_to_be_of_type col: Quantity 
+2025-07-30T14:57:20.797371 -  ==== True ==== expect_column_values_to_not_be_null col: Quantity 
+2025-07-30T14:57:20.797385 -  ==== True ==== expect_column_to_exist col: Quantity 
+2025-07-30T14:57:20.797400 -  ==== True ==== expect_column_values_to_be_of_type col: Discount 
+2025-07-30T14:57:20.797414 -  ==== True ==== expect_column_to_exist col: Discount 
+2025-07-30T14:57:20.797428 - {'evaluated_expectations': 14, 'successful_expectations': 14, 'unsuccessful_expectations': 0, 'success_percent': 100.0} 
+2025-07-30T14:57:21.307770 - ==== Validating table:Customers 
+2025-07-30T14:57:21.307891 -  ==== True ==== expect_column_values_to_be_of_type col: CustomerID 
+2025-07-30T14:57:21.307916 -  ==== True ==== expect_column_values_to_not_be_null col: CustomerID 
+2025-07-30T14:57:21.307932 -  ==== True ==== expect_column_values_to_be_unique col: CustomerID 
+2025-07-30T14:57:21.307946 -  ==== True ==== expect_column_to_exist col: CustomerID 
+2025-07-30T14:57:21.307961 -  ==== True ==== expect_column_values_to_be_of_type col: ContactName 
+2025-07-30T14:57:21.307975 -  ==== True ==== expect_column_to_exist col: ContactName 
+2025-07-30T14:57:21.307989 -  ==== True ==== expect_column_values_to_be_of_type col: CompanyName 
+2025-07-30T14:57:21.308002 -  ==== True ==== expect_column_to_exist col: CompanyName 
+2025-07-30T14:57:21.308016 -  ==== True ==== expect_column_values_to_be_of_type col: ContactTitle 
+2025-07-30T14:57:21.308030 -  ==== True ==== expect_column_to_exist col: ContactTitle 
+2025-07-30T14:57:21.308044 -  ==== True ==== expect_column_values_to_be_of_type col: Address 
+2025-07-30T14:57:21.308059 -  ==== True ==== expect_column_to_exist col: Address 
+2025-07-30T14:57:21.308088 -  ==== True ==== expect_column_values_to_be_of_type col: Country 
+2025-07-30T14:57:21.308103 -  ==== True ==== expect_column_to_exist col: Country 
+2025-07-30T14:57:21.308117 -  ==== True ==== expect_column_values_to_be_of_type col: City 
+2025-07-30T14:57:21.308131 -  ==== True ==== expect_column_values_to_not_be_null col: City 
+2025-07-30T14:57:21.308145 -  ==== True ==== expect_column_to_exist col: City 
+2025-07-30T14:57:21.308159 -  ==== True ==== expect_column_values_to_be_of_type col: Region 
+2025-07-30T14:57:21.308172 -  ==== True ==== expect_column_values_to_not_be_null col: Region 
+2025-07-30T14:57:21.308186 -  ==== True ==== expect_column_to_exist col: Region 
+2025-07-30T14:57:21.308200 -  ==== True ==== expect_column_values_to_be_of_type col: PostalCode 
+2025-07-30T14:57:21.308213 -  ==== True ==== expect_column_to_exist col: PostalCode 
+2025-07-30T14:57:21.308227 -  ==== True ==== expect_column_values_to_be_of_type col: Fax 
+2025-07-30T14:57:21.308240 -  ==== True ==== expect_column_to_exist col: Fax 
+2025-07-30T14:57:21.308254 -  ==== True ==== expect_column_values_to_be_of_type col: Phone 
+2025-07-30T14:57:21.308267 -  ==== True ==== expect_column_to_exist col: Phone 
+2025-07-30T14:57:21.308281 -  ==== True ==== expect_column_values_to_be_of_type col: temp 
+2025-07-30T14:57:21.308295 -  ==== True ==== expect_column_values_to_be_between col: temp 
+2025-07-30T14:57:21.308308 -  ==== True ==== expect_column_to_exist col: temp 
+2025-07-30T14:57:21.308329 -  ==== True ==== expect_column_values_to_be_of_type col: pressure 
+2025-07-30T14:57:21.308343 -  ==== True ==== expect_column_values_to_be_between col: pressure 
+2025-07-30T14:57:21.308356 -  ==== True ==== expect_column_to_exist col: pressure 
+2025-07-30T14:57:21.308369 -  ==== True ==== expect_column_values_to_be_of_type col: humidity 
+2025-07-30T14:57:21.308383 -  ==== True ==== expect_column_values_to_be_between col: humidity 
+2025-07-30T14:57:21.308397 -  ==== True ==== expect_column_to_exist col: humidity 
+2025-07-30T14:57:21.308411 -  ==== True ==== expect_column_values_to_be_of_type col: sea_level 
+2025-07-30T14:57:21.308424 -  ==== True ==== expect_column_values_to_be_between col: sea_level 
+2025-07-30T14:57:21.308439 -  ==== True ==== expect_column_to_exist col: sea_level 
+2025-07-30T14:57:21.308452 -  ==== True ==== expect_column_values_to_be_of_type col: temp_max 
+2025-07-30T14:57:21.308466 -  ==== True ==== expect_column_values_to_be_between col: temp_max 
+2025-07-30T14:57:21.308480 -  ==== True ==== expect_column_to_exist col: temp_max 
+2025-07-30T14:57:21.308494 -  ==== True ==== expect_column_values_to_be_of_type col: temp_min 
+2025-07-30T14:57:21.308507 -  ==== True ==== expect_column_values_to_be_between col: temp_min 
+2025-07-30T14:57:21.308521 -  ==== True ==== expect_column_to_exist col: temp_min 
+2025-07-30T14:57:21.308535 -  ==== True ==== expect_column_values_to_be_of_type col: grnd_level 
+2025-07-30T14:57:21.308548 -  ==== True ==== expect_column_values_to_be_between col: grnd_level 
+2025-07-30T14:57:21.308562 -  ==== True ==== expect_column_to_exist col: grnd_level 
+2025-07-30T14:57:21.308575 -  ==== True ==== expect_column_values_to_be_of_type col: main 
+2025-07-30T14:57:21.308589 -  ==== True ==== expect_column_to_exist col: main 
+2025-07-30T14:57:21.308602 -  ==== True ==== expect_column_values_to_be_of_type col: description 
+2025-07-30T14:57:21.308615 -  ==== True ==== expect_column_to_exist col: description 
+2025-07-30T14:57:21.308629 -  ==== True ==== expect_column_values_to_be_of_type col: wind_speed 
+2025-07-30T14:57:21.308642 -  ==== True ==== expect_column_values_to_be_between col: wind_speed 
+2025-07-30T14:57:21.308655 -  ==== True ==== expect_column_to_exist col: wind_speed 
+2025-07-30T14:57:21.308668 - {'evaluated_expectations': 54, 'successful_expectations': 54, 'unsuccessful_expectations': 0, 'success_percent': 100.0} 
+2025-07-30T14:57:21.359252 - ==== Validating table:region_mapping 
+2025-07-30T14:57:21.359341 -  ==== True ==== expect_column_values_to_be_of_type col: Country 
+2025-07-30T14:57:21.359366 -  ==== True ==== expect_column_values_to_not_be_null col: Country 
+2025-07-30T14:57:21.359443 -  ==== True ==== expect_column_to_exist col: Country 
+2025-07-30T14:57:21.359461 -  ==== True ==== expect_column_values_to_be_of_type col: Region starting 2016 
+2025-07-30T14:57:21.359476 -  ==== True ==== expect_column_values_to_not_be_null col: Region starting 2016 
+2025-07-30T14:57:21.359490 -  ==== True ==== expect_column_to_exist col: Region starting 2016 
+2025-07-30T14:57:21.359506 -  ==== True ==== expect_column_values_to_be_of_type col: Region until 2017 
+2025-07-30T14:57:21.359520 -  ==== True ==== expect_column_values_to_not_be_null col: Region until 2017 
+2025-07-30T14:57:21.359534 -  ==== True ==== expect_column_to_exist col: Region until 2017 
+2025-07-30T14:57:21.359547 - {'evaluated_expectations': 9, 'successful_expectations': 9, 'unsuccessful_expectations': 0, 'success_percent': 100.0} 
+2025-07-30T14:57:23.263242 - === Orders TABLE IN TARGET DB OK === 
+2025-07-30T14:57:23.264292 - === [Order Details] TABLE IN TARGET DB OK === 
+2025-07-30T14:57:23.266300 - === Customers TABLE IN TARGET DB OK === 
+2025-07-30T14:57:23.266959 - === region_mapping TABLE IN TARGET DB OK === 
