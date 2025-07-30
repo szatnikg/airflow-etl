@@ -3,15 +3,15 @@ import os
 import sqlite3
 import pandas as pd
 
-
 import sys
 sys.path.insert(0, os.path.abspath(r'/opt/airflow/scripts'))
-
 # own imports
 from static_dir import StaticDirectory
 
+
+
 class DbHandler(StaticDirectory):
-    """Handling SQLlite interactions, data read, extract src"""
+    """SQLlite init"""
 
     def __init__(self, db_src):
         # call super for downstream initialization
@@ -19,6 +19,18 @@ class DbHandler(StaticDirectory):
         # Connect to the DB
         self.conn = sqlite3.connect(db_src)
         self.c = self.conn.cursor()
+    
+    def get_tables(self):
+        # Q: which tables to load?
+        # Query to get all table names
+        self.c.execute(self.query_tables)
+
+        tables = self.c.fetchall()
+
+        # Print table names
+        for table in tables:
+            print(table[0]) 
+        return tables
 
         
     def close_conn(self):
@@ -35,17 +47,7 @@ class ExtractTables(DbHandler):
         if not os.path.exists(self.TEMP):
             os.mkdir(self.TEMP)
 
-    def get_tables(self):
-            # Q: which tables to load?
-            # Query to get all table names
-            self.c.execute(self.query_tables)
 
-            tables = self.c.fetchall()
-
-            # Print table names
-            for table in tables:
-                print(table[0]) 
-            return tables
 
     def read_region_mapping(self, excel_name):
         path=f'{self.TEMP}/{excel_name}.parquet'
@@ -69,12 +71,11 @@ class ExtractTables(DbHandler):
 
 def run():
     #provide DBSRC as docker env variable
-    DB_SRC = "./data/src/northwind/dist/northwind.db"
     EXCEL_NAME_NOEXT = 'region_mapping'
-    executor = ExtractTables(DB_SRC)
+    executor = ExtractTables(os.getenv('DB_SRC'))
     executor.read_region_mapping(EXCEL_NAME_NOEXT)
     executor.extract_tables()
+    executor.close_conn()
 
-
-#if __name__=='__main__':
-    #run()
+if __name__=='__main__':
+    run()

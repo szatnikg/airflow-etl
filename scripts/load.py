@@ -1,20 +1,43 @@
+from datetime import timedelta, datetime
+import os
+import sqlite3
+import pandas as pd
+
+
+import sys
+sys.path.insert(0, os.path.abspath(r'/opt/airflow/scripts'))
+
+
+from extract import DbHandler
+
+class Loader:
+    def __init__(self, conn):
+        self.conn = conn
+        self.c = self.conn.cursor()
+
+    def load(self, table_name, df):
+
+        df.to_sql(table_name, self.conn, if_exists="replace", index=False)
+
+    def check_results(self, query, table_name):
+        df = pd.read_sql_query(query, self.conn)
+        if len(df) == 5:
+            print(f'=== {table_name} TABLE IN TARGET DB OK ===')
+        else:
+            print(f'=== TABLE NAME {table_name} =  ERROR IN TARGET DB: no records ===')
+
 def run():
-    print('load started ///HEREE')
-    import sys
+    db = DbHandler(os.getenv('DB_TARGET'))
 
+    loader = Loader(db.conn)
+    for table_name in db.ALL_TABLES:
+        loader.load(table_name, db.read_tmp_table(table_name))
     
-    import asyncio
-    import aiohttp
-    import json
-    import os
-    from datetime import timedelta, datetime
-    import sqlite3
-    import great_expectations as gx
-    context = gx.get_context()
-    print(gx.__version__)
-    data_source = context.data_sources.add_pandas("pandas")
-    data_asset = data_source.add_dataframe_asset(name="pd dataframe asset")
-    batch_definition = data_asset.add_batch_definition_whole_dataframe("batch definition")
+    # validate results
+    db.get_tables()
+    for table_name in db.ALL_TABLES:
+        loader.check_results(db.get_top5_query(table_name), table_name) 
 
-    import pandas as pd
-    print("-- LOAD running -- ")
+if __name__=='__main__':
+    run()
+    

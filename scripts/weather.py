@@ -153,8 +153,8 @@ class WeatherApiHandler(StaticDirectory):
                     return await asyncio.gather(*tasks)
 
 def run():
-    API_KEY='a0b3246fcb7f3c24629e62141a4634a9' # use docker compose env var instead
-    executor = WeatherApiHandler(API_KEY)
+    
+    executor = WeatherApiHandler(os.getenv('API_KEY'))
 
     df = pd.read_parquet(executor.TEMP+'/Customers.parquet')
     executor.extract_cities_weather(df['City'].dropna().unique())
