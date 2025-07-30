@@ -2,3 +2,5 @@ logs
 *__pycache*
 config
 plugins
+/data/sink/*.db
+/data/sink/*.log

@@ -193,6 +193,19 @@ services:
         condition: service_completed_successfully
 
 
+  airflow-trigger-dag:
+    <<: *airflow-common
+    depends_on:
+      airflow-scheduler:
+        condition: service_healthy
+    entrypoint: >
+      /bin/bash -c "
+      echo 'Waiting for Airflow to be ready...' &&
+      sleep 30 &&
+      airflow dags unpause etl_pipeline_dag"
+    restart: "no"
+
+
   airflow-init:
     <<: *airflow-common
     entrypoint: /bin/bash

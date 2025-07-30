@@ -1,3 +1,4 @@
+import traceback
 from datetime import timedelta, datetime
 import os
 import sqlite3
@@ -55,7 +56,10 @@ class ExtractTables(DbHandler):
         
         region_map_df.to_parquet(path, index=False)
         if os.path.exists(path):
+            self.append_log('=== EXTRACTED TABLE WRITTEN TO: '+ path)
             print('=== EXTRACTED TABLE WRITTEN TO: ', path)
+        else:
+            raise ValueError('=== EXTRACTED TABLE COULD NOT BE WRITTEN TO: ' +path)
 
     def extract_tables(self):
         # use yield generator / df writes to disk ?
@@ -65,17 +69,25 @@ class ExtractTables(DbHandler):
             df = pd.read_sql_query(self.get_query(table), self.conn)
             df.to_parquet(path, index=False)
             if os.path.exists(path):
+                self.append_log('=== EXTRACTED TABLE WRITTEN TO: '+ path)
                 print('=== EXTRACTED TABLE WRITTEN TO: ', path)
-
-
+            else:
+                #this gets wriiten to log via run() except case
+                raise ValueError('=== EXTRACTED TABLE COULD NOT BE WRITTEN TO: ' +path)
 
 def run():
-    #provide DBSRC as docker env variable
-    EXCEL_NAME_NOEXT = 'region_mapping'
-    executor = ExtractTables(os.getenv('DB_SRC'))
-    executor.read_region_mapping(EXCEL_NAME_NOEXT)
-    executor.extract_tables()
-    executor.close_conn()
+    EXCEL_NAME_NOEXT = 'region_mapping'   
+    try:
+        executor = ExtractTables(os.getenv('DB_SRC')) 
+        executor.read_region_mapping(EXCEL_NAME_NOEXT)
+        executor.extract_tables()
+        executor.close_conn()
+    
+    except Exception as MyErr:
+        sd = StaticDirectory()
+        sd.append_log('ERROR in extract.py: '+str(MyErr))
+        stat.append_log(traceback.format_exc())
+        raise ValueError(MyErr)
 
 if __name__=='__main__':
     run()

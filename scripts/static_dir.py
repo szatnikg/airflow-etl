@@ -1,5 +1,8 @@
 import pandas as pd
 import os
+from datetime import datetime
+
+
 
 class StaticDirectory():
     def __init__(self):
@@ -12,7 +15,15 @@ class StaticDirectory():
         self.TEMP = os.path.join(self.DATA_SOURCE, 'tmp')
 
         self.query_tables = "SELECT name FROM sqlite_master WHERE type='table';"
+        self.create_log_file()
 
+    def create_log_file(self):
+        self.logpath = './data/sink/etl.log'
+        if not os.path.exists(self.logpath):
+            with open(self.logpath,'w') as logf:
+                logf.write('==== LOG INIT ==== \n')
+            return
+        
     def read_tmp_table(self, name):
         path = os.path.join(self.TEMP, name+'.parquet')
         try:
@@ -31,3 +42,9 @@ class StaticDirectory():
         q = f"SELECT * FROM {table}"
         return q
     
+    def append_log(self, text):
+        log_message = f"{datetime.now().isoformat()} - {text} \n"
+
+        with open(self.logpath, 'a',encoding='utf-8') as lf:
+            lf.write(log_message)
+            return

@@ -1,7 +1,12 @@
+import traceback
 import great_expectations as gx
 import pandas as pd 
 import sys
 import os
+
+import logging
+logging.getLogger("great_expectations").setLevel(logging.ERROR)
+
 
 sys.path.insert(0, os.path.abspath(r'/opt/airflow/scripts'))
 from static_dir import StaticDirectory
@@ -15,8 +20,9 @@ batch_definition = data_asset.add_batch_definition_whole_dataframe("batch defini
 
 
 class Validator():
-    def __init__(self, dirname):
+    def __init__(self, dirname, stat):
         self.TEMP=dirname
+        self.statDir = stat
 
     def get_expectations(self, table_name):
         expectations=[]
@@ -170,6 +176,10 @@ class Validator():
         else:
             raise ValueError('DEFINE YOUR TABLE in queries.py self.EXTRACT_TABLES=(Orders,[Order Details],Customers) + region_mapping')
         
+    def exempt(self, checkType, col):
+        if table_name=="Orders":
+            if checkType=='':
+                pass
 
     def validate(self, table_name, df):
         batch = batch_definition.get_batch(batch_parameters={"dataframe": df})
@@ -186,27 +196,34 @@ class Validator():
         
         appendix='##ERROR##'
 
+        self.statDir.append_log('==== Validating table:'+table_name)
         print('==== validating table:',table_name)
         for test in validation_result['results']:
             if test['success']==False:
-                print(appendix,test['success'], ' #### Failed on ',test['expectation_config']['type'] ,' col: ', test['expectation_config']['kwargs']['column'])
+                # fail the pipeline if column and error type is not exempted.
+                self.statDir.append_log(appendix +' ==== Failed on '+test['expectation_config']['type'] +' col: '+ test['expectation_config']['kwargs']['column'])
+                print(appendix, ' ==== Failed on ',test['expectation_config']['type'] ,' col: ', test['expectation_config']['kwargs']['column'])
             else:
                 pass
                 #print(' ==== ',test['success'], ' ==== ',test['expectation_config']['type'],' col: ', test['expectation_config']['kwargs']['column'])
+        self.statDir.append_log(validation_result['statistics'])
         print(validation_result['statistics'])
+        return
 
 def run():
     stat = StaticDirectory()
+    try:
+        exec = Validator(stat.TEMP, stat)
+        
+        for table_name in stat.ALL_TABLES:
+            exec.validate(table_name, stat.read_tmp_table(table_name))
+
+    except Exception as MyErr:
+        stat.append_log('ERROR in validate.py: '+str(MyErr))
+        stat.append_log(traceback.format_exc())
+        raise ValueError(MyErr)
+
     
-    exec = Validator(stat.TEMP)
-
-    for table_name in stat.EXTRACT_TABLES:
-        exec.validate(table_name, stat.read_tmp_table(table_name))
-    
-    #region mapping
-    exec.validate('region_mapping', stat.read_tmp_table('region_mapping'))
-
-
 
 if __name__=="__main__":
     run()

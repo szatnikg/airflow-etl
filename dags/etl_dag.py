@@ -4,6 +4,8 @@ from airflow.operators.python import PythonOperator
 from datetime import datetime
 import os
 import sys
+from airflow.utils.trigger_rule import TriggerRule
+
 sys.path.insert(0, os.path.abspath(r'/opt/airflow/'))
 
 import logging
@@ -34,11 +36,24 @@ def run_transform():
     from scripts import transform
     transform.run()
 
+def read_log():
+    from scripts import read_log
+    read_log.run()
+
+default_args = {
+    'owner': 'Gergo',
+    'depends_on_past': False,
+    'start_date': datetime(2025, 1, 1),
+    'email_on_failure': False,
+    'email_on_retry': False,
+    'retries': 0,
+    }
+
 # Define the DAG
 with DAG(
     dag_id="etl_pipeline_dag",
-    start_date=datetime(2023, 1, 1),
-    schedule=None,  # Manual trigger
+    default_args=default_args,
+    schedule='@daily',  
     catchup=False,
     tags=["etl", "poc"],
 ) as dag:
@@ -68,6 +83,12 @@ with DAG(
         python_callable=run_load,
     )
 
+    log_task = PythonOperator(
+        task_id='read_log',
+        python_callable=read_log,
+        trigger_rule=TriggerRule.ALL_DONE,  # This ensures it runs no matter what
+    )
+
     # Define task dependencies
-    extract_task >> weather_task >> transform_task >> validate_task >> load_task
+    extract_task >> weather_task >> transform_task >> validate_task >> load_task >> log_task
 

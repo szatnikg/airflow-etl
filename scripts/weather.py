@@ -1,3 +1,4 @@
+import traceback
 import pandas as pd
 import asyncio
 import aiohttp
@@ -67,13 +68,16 @@ class WeatherApiHandler(StaticDirectory):
         
         path=f'{self.TEMP}/weather.parquet'
         self.weather_df.to_parquet(path, index=False)
-
-        if not self.weather_df.count().all() or (self.weather_df.count().all() > 0.5 * len(cities)):
+        self.append_log('=== self.weather_df.count() = '+str(self.weather_df.count()))
+        if not self.weather_df.count().all() and (self.weather_df.count().all() < 0.5 * len(cities)):
+            self.append_log('=== ##ERROR## less than 50% weather data was fetched for cities')
             raise ValueError('=== ##ERROR## less than 50% weather data was fetched for cities')
         else:
+            self.append_log('=== WEATHER DATA OBTAINED SUCCESSFULLY')
             print('\n=== WEATHER DATA OBTAINED SUCCESSFULLY')
             
         if os.path.exists(path):
+            self.append_log('=== WEATHER TABLE WRITTEN TO: '+ path)
             print('\n=== WEATHER TABLE WRITTEN TO: ', path)
         
         return
@@ -93,6 +97,7 @@ class WeatherApiHandler(StaticDirectory):
             try: self.register_coordinates_heap(city, data[0]['lon'], data[0]['lat'])
             except:
                 self.register_coordinates_heap(city, None, None)
+                self.append_log('=== ##WARNING## No data available for '+city)
                 print('=== ##WARNING## No data available for '+city)
             return data 
     
@@ -105,11 +110,12 @@ class WeatherApiHandler(StaticDirectory):
         async with session.get(weather_URL) as response:
             res = await response.text()
             if response.status>300:
+                self.append_log('session.get.weather ERROR -- status code '+res)
                 print('session.get.weather ERROR -- status code '+res)
                 return
             data = json.loads(res.encode('utf-8'))
             # build df (in case of memory issues  consider writing to disk periodically and flushing self.weather_df)
-            
+            self.append_log('=== WEATHER DATA: '+json.dumps(data))
             new_data = {
                 'City': city,
                 'temp': data['main']['temp'],
@@ -133,8 +139,8 @@ class WeatherApiHandler(StaticDirectory):
                     if not new_df.empty and not new_df.isna().all().all():
                         # Concatenate the new data with the existing DataFrame
                         self.weather_df = pd.concat([self.weather_df, new_df], ignore_index=True)
-            
             return
+            
 
     async def main_city_call(self, cities, only_coordinate=True):
         async with aiohttp.ClientSession() as session:
@@ -153,12 +159,17 @@ class WeatherApiHandler(StaticDirectory):
                     return await asyncio.gather(*tasks)
 
 def run():
-    
-    executor = WeatherApiHandler(os.getenv('API_KEY'))
+    try:
+        executor = WeatherApiHandler(os.getenv('API_KEY'))
 
-    df = pd.read_parquet(executor.TEMP+'/Customers.parquet')
-    executor.extract_cities_weather(df['City'].dropna().unique())
+        df = pd.read_parquet(executor.TEMP+'/Customers.parquet')
+        executor.extract_cities_weather(df['City'].dropna().unique())
 
+    except Exception as MyErr:
+        sd = StaticDirectory()
+        sd.append_log('ERROR in weather.py: '+str(MyErr))
+        sd.append_log(traceback.format_exc())
+        raise ValueError(MyErr)
 
 if __name__=="__main__":
     run()
